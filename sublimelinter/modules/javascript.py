@@ -33,12 +33,12 @@ class Linter(BaseLinter):
                 return (True, path, 'using gjslint')
             except OSError:
                 return (False, '', 'gjslint cannot be found')
-        elif (self.linter == 'both'):
+        elif (self.linter == 'all'):
             try:
-                path = self.get_mapped_executable(view, 'both')
+                path = self.get_mapped_executable(view, 'all')
                 subprocess.call([path], startupinfo=self.get_startupinfo())
                 self.input_method = INPUT_METHOD_TEMP_FILE
-                return (True, path, path + ' using both')
+                return (True, path, path + ' using all')
             except OSError:
                 return (False, '', 'gjslint cannot be found')
 
@@ -54,7 +54,7 @@ class Linter(BaseLinter):
             return args
         elif (self.linter in ('jshint', 'jslint')):
             return self.get_javascript_args(view, self.linter, code)
-        elif (self.linter == 'both'):
+        elif (self.linter == 'all'):
             args = []
             args.extend([filename])
             return args
@@ -82,7 +82,7 @@ class Linter(BaseLinter):
                     if (int(errnum) not in ignore):
                         self.add_message(int(line), lines, message, errorMessages)
 
-        elif (self.linter == 'both'):
+        elif (self.linter == 'all'):
             ignore = view.settings().get('gjslint_ignore', [])
 
             for line in errors.splitlines():
